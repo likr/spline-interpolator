@@ -98,13 +98,10 @@ class SplineInterpolator {
   }
 
   interpolate (v) {
-    const i = bisectRight(this.x, v) - 1
-    if (i < 0) {
-      return this.y[0]
-    }
-    if (i === this.n - 1) {
+    if (v === this.x[this.n - 1]) {
       return this.y[this.n - 1]
     }
+    const i = Math.min(Math.max(0, bisectRight(this.x, v) - 1), this.n - 2)
     const [a, b, c, d] = this.params[i]
     v = v - this.x[i]
     return a * v * v * v + b * v * v + c * v + d
@@ -146,14 +143,14 @@ class SplineInterpolator {
     return [this.min(), this.max()]
   }
 
-  curve (nInterval) {
-    const domain = this.domain()
+  curve (nInterval, domain = null) {
+    domain = domain || this.domain()
     const delta = (domain[1] - domain[0]) / (nInterval - 1)
-    const vals = []
-    for (let i = 0, x = domain[0]; i < nInterval - 1; ++i, x += delta) {
+    const vals = new Array(nInterval)
+    for (let i = 0; i < nInterval; ++i) {
+      const x = delta * i + domain[0]
       vals[i] = [x, this.interpolate(x)]
     }
-    vals.push([this.x[this.n - 1], this.y[this.n - 1]])
     return vals
   }
 }
