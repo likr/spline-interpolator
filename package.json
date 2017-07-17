@@ -1,6 +1,6 @@
 {
   "name": "spline-interpolator",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Library for smoothing spline interpolation.",
   "main": "index.js",
   "files": [
